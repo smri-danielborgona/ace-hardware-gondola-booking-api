@@ -1,6 +1,8 @@
 Django Rest Framework Project
 
 ### Installation
+Requires `python 3.11`
+
 ```shell
 python -m virtualenv venv
 venv\scripts\activate  # activate virtual environment
