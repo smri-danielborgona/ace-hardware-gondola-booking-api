@@ -1,4 +1,4 @@
-Django Rest Framework Project
+# Django Rest Framework Project
 
 ### Installation
 Requires `python 3.11`
