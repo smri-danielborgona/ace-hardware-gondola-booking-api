@@ -1,0 +1,31 @@
+services:
+  backend:
+    platform: linux/amd64
+    build: ./
+    image: ace-gondola-booking-backend:latest
+    container_name: ace_gondola_booking_backend
+    volumes:
+      - static_data:/app/staticfiles
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_NAME=${MYSQL_DATABASE}
+      - DB_USER=${MYSQL_USER}
+      - DB_PASSWORD=${MYSQL_PASSWORD}
+      - DB_HOST=${MYSQL_HOST}
+      - DB_PORT=${MYSQL_PORT}
+
+  frontend:
+    image: ace-gondola-booking-frontend:latest
+    container_name: ace_gondola_booking_frontend
+    environment:
+      - BASE_API_URL=http://sample123:8000
+    volumes:
+      - static_data:/usr/share/nginx/html/static
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+
+volumes:
+  static_data:
