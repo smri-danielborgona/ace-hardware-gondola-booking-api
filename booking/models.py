@@ -63,10 +63,21 @@ class Booking(models.Model):
     )
 
     gondola = models.ForeignKey(Gondola, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookings')  # user who created the booking
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookings')
     modified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='modified_bookings')
-    booking_status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    booking_status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
     booking_date = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return f"Booking #{self.id} - {self.user.username}"
+
+    def save(self, *args, **kwargs):
+        if self.booking_status == 'REJECTED':
+            self.gondola.status = 'AVAILABLE'
+        elif self.booking_status == 'APPROVED':
+            self.gondola.status = 'RESERVED'
+        else: 
+            self.gondola.status = 'PENDING'
+
+        self.gondola.save()
+        super().save(*args, **kwargs)
