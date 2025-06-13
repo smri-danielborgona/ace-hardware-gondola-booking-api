@@ -14,12 +14,19 @@ class UserSerializer(serializers.ModelSerializer):
         ]
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = UserSerializer(read_only=True)
+
+    user_id = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(),
+        source='user',
+        write_only=True
+    )
 
     class Meta:
         model = UserProfile
         fields = [
             'user', 
+            'user_id',
             'profile_name', 
             'user_type', 
             'vendor_code'
